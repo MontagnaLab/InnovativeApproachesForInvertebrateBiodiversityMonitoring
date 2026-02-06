@@ -153,17 +153,20 @@ Follow the instructions for your operating system.
 
 #### 1.1.4 Install optional softwares
 
-We will use a couple of additional software tools to generate a report on raw sequence quality. If you wish, you can install and run them yourself; otherwise, you can rely on the report file provided.
+We will use a couple of additional software tools to generate a report on raw sequence quality. If you wish, you can install and run them yourself; otherwise, you can rely on the report files that will be provoided.
 - [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 - [MultiQC](https://seqera.io/multiqc/)
 
 ---
 
 ### 1.2 Download data
-You will learn to perform metabarcoding analysis using a small subset of the data collected by EUROSTAT during the Land Use Change Area Survey ([LUCAS](https://doi.org/10.1111/gcb.16871)). Within this project soil samples were collected across Europe to characterize both soil physico-chemical properties and the biological communities present (bacteria, fungi, metazoan). Since the focus of this course are invertebrates we will use metabarcoding data produced targeting the 18S marker gene.
+You will learn to perform metabarcoding analysis using a small subset of the data collected by EUROSTAT during the Land Use Change Area Survey ([LUCAS](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=LUCAS_-_Land_use_and_land_cover_survey)). Within this project soil samples were collected across Europe to characterize both soil physico-chemical properties and the biological communities present (bacteria, fungi, metazoan). Since the focus of this course are invertebrates we will use metabarcoding data produced targeting the 18S marker gene provided in this [paper](https://doi.org/10.1111/gcb.16871). Below you can see a map of all the LUCAS sampling points.
 
 ![LUCAS sampling points.](https://github.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/blob/main/img/LUCAS_sampling.jpg?raw=true)
 
+You can download the subsample of LUCAS data that we will use in the analisis [here..missing.link..](missing.link)
+> [!NOTE]
+> STILL HAVE TO ADD LINK TO DOWNLOAD DATA
 
 ---
 
