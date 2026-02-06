@@ -108,16 +108,16 @@ Follow the instructions for your operating system.
         conda update conda
         ```
     
-    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2025.10' to indicate what QIIME2 release is installed .
+    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2026.1' to indicate what QIIME2 release is installed .
     
         ```bash
-        conda env create --name qiime2-amplicon-2025.10 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.10/amplicon/released/qiime2-amplicon-ubuntu-latest-conda.yml
+        conda env create --name qiime2-amplicon-2026.1 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2026.1/amplicon/released/qiime2-amplicon-ubuntu-latest-conda.yml
         ```
     
     3. Activate the conda environment containing QIIME2. You will need to run this command every time you need to use QIIME2.
     
         ```bash
-        conda activate qiime2-amplicon-2025.10
+        conda activate qiime2-amplicon-2026.1
         ```
     
     4. Deactivate the conda environment. Run this to quit the QIIME2 environment and return to the base environment.
@@ -134,16 +134,16 @@ Follow the instructions for your operating system.
         conda update conda
         ```
     
-    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2025.10' to indicate what QIIME2 release is installed .
+    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2026.1' to indicate what QIIME2 release is installed .
     
         ```bash
-        conda env create --name qiime2-amplicon-2025.10 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.10/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
+        conda env create --name qiime2-amplicon-2026.1 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2026.1/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
         ```
     
     3. Activate the conda environment containing QIIME2. You will need to run this command every time you need to use QIIME2.
     
         ```bash
-        conda activate qiime2-amplicon-2025.10
+        conda activate qiime2-amplicon-2026.1
         ```
     
     4. Deactivate the conda environment. Run this to quit the QIIME2 environment and return to the base environment.
