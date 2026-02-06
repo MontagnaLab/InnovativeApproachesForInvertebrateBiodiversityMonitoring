@@ -10,12 +10,12 @@
 - optional softwares (FastQC, MultiQC)
 
 #### 1.1.1 Obtain a Unix environment
-A **Unix** environment is an operating system interface that allows users to manage files and run programs through a command line, widely used for scientific computing and data analysis. Linux and MAC operating systems are already Unix-based. For Windows users the easiest way to obtain a working Unix environment is to install the Windows Subsystem for Linux (WSL) following these [instructions](https://learn.microsoft.com/en-us/windows/wsl/install). To activate the Linux terminal you just need to type `wsl` in the windows PowerShell.
+A **Unix** environment is an operating system interface that allows users to manage files and run programs through a command line, it is widely used for scientific computing and data analysis. **Linux** and **MAC** operating systems are already Unix-based. For **Windows** users the easiest way to obtain a working Unix environment is to install the Windows Subsystem for Linux (WSL) following these [instructions](https://learn.microsoft.com/en-us/windows/wsl/install). Then to activate the Linux terminal you just need to type `wsl` in the windows PowerShell.
 
 #### 1.1.2 Install R and RStudio
-**R** is a programming language designed for statistical computing and data analysis, particularly well suited for handling, analyzing, and visualizing biological data. Follow the instructions for your operating system reported in this [page](https://cran.rstudio.com/).
+**R** is a programming language designed for statistical computing and data analysis, particularly well suited for handling, analyzing, and visualizing biological data. To install **R** follow the instructions for your operating system reported in this [page](https://cran.rstudio.com/).
 
-**RStudio** is an integrated development environment (IDE) that provides a user-friendly interface for writing, running, and managing R code, along with tools for data visualization and debugging. It is not strictly needed to run the analysis but it makes it easier. You can install RStudio following the instructions for your operating system reported in this [page](https://posit.co/download/rstudio-desktop/).
+**RStudio** is an integrated development environment (IDE) that provides a user-friendly interface for writing, running, and managing R code, along with tools for data visualization and debugging. It is not strictly needed to run the analysis but it makes it easier. You can install **RStudio** following the instructions for your operating system reported in this [page](https://posit.co/download/rstudio-desktop/).
 
 #### 1.1.3 Install QIIME2
 **QIIME2** is an open-source, plugin-based bioinformatics platform for reproducible analysis of amplicon sequencing data, widely used to study microbial and eukaryotic community composition from DNA metabarcoding datasets. The easiest way to install QIIME2 is within a conda environment, as described below, if you prefer to install it within a docker follow these [instructions](https://library.qiime2.org/quickstart/amplicon#:~:text=Using%20Docker%C2%B6,%2Dt) instead.
@@ -50,7 +50,7 @@ Follow the instructions for your operating system. In case of trubles, the full 
         rm Miniconda3-latest-Linux-x86_64.sh
         ```
     
-    5. ⚠️ You need to close and re-open your terminal window for the installation to fully take effect
+    5. ⚠️ You need to close and re-open your terminal window for the installation to fully take effect.
     
     6. Verify the installation. If everything is ok it should print the version of conda installed.
     
@@ -154,8 +154,8 @@ Follow the instructions for your operating system.
 #### 1.1.4 Install optional softwares
 
 We will use a couple of additional software tools to generate a report on raw sequence quality. If you wish, you can install and run them yourself; otherwise, you can rely on the report file provided.
-- (FastQC)[https://www.bioinformatics.babraham.ac.uk/projects/fastqc/]
-- (MultiQC)[https://seqera.io/multiqc/]
+- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- [MultiQC](https://seqera.io/multiqc/)
 
 ---
 
