@@ -7,7 +7,8 @@
 - UNIX environment
 - R and Rstudio
 - QIIME2
-- optional softwares (FastQC, MultiQC)
+- FastQC (optional)
+- MultiQC (optional)
 
 #### 1.1.1 Obtain a Unix environment
 A **Unix** environment is an operating system interface that allows users to manage files and run programs through a command line, it is widely used for scientific computing and data analysis. **Linux** and **MAC** operating systems are already Unix-based. For **Windows** users the easiest way to obtain a working Unix environment is to install the Windows Subsystem for Linux (WSL) following these [instructions](https://learn.microsoft.com/en-us/windows/wsl/install). Then to activate the Linux terminal you just need to type `wsl` in the windows PowerShell.
