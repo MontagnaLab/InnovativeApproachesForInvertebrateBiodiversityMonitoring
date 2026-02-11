@@ -1,4 +1,4 @@
-# **Bioinformatic analysis of metabarcoding data for soil invertebrates**
+# Bioinformatic analysis of metabarcoding data for soil invertebrates
 
 ## 1. Prerequisites
 
@@ -21,7 +21,7 @@ A **Unix** environment is an operating system interface that allows users to man
 #### 1.1.3 Install QIIME2
 **QIIME2** is an open-source, plugin-based bioinformatics platform for reproducible analysis of amplicon sequencing data, widely used to study microbial and eukaryotic community composition from DNA metabarcoding datasets. The easiest way to install QIIME2 is within a conda environment, as described below, if you prefer to install it within a docker follow these [instructions](https://library.qiime2.org/quickstart/amplicon#:~:text=Using%20Docker%C2%B6,%2Dt) instead.
 
-##### 1.1.3.1 Install Miniconda
+**STEP 1 - Install Miniconda**
 
 Follow the instructions for your operating system. In case of trubles, the full istructions for miniconda installation are available [here](https://www.anaconda.com/docs/getting-started/miniconda/install#manual-shell-initialization).
 
@@ -96,7 +96,7 @@ Follow the instructions for your operating system. In case of trubles, the full 
 
 
 
-##### 1.1.3.2 Install QIIME2
+**STEP 2 - Install QIIME2**
 
 Follow the instructions for your operating system. 
 
