@@ -406,6 +406,7 @@ qiime feature-table tabulate-seqs \
 ```
 
 
+
 ---
 
 ---
@@ -420,6 +421,61 @@ qiime feature-table tabulate-seqs \
 
 ---
 
+
+
+
+
+
+
+### 2.6 Taxonomic classification
+Now we are ready to assign a taxonomic label to each ASV. We will use a naive bayes classifier trained on the SILVA reference database that we built before
+```bash
+# fit a classifier
+qiime feature-classifier fit-classifier-naive-bayes \
+  --i-reference-reads silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \
+  --i-reference-taxonomy silva-138.1-ssu-nr99-tax_Euk575-895_derep-uniq.qza \
+  --p-verbose \
+  --o-classifier NBclassifier.qza
+
+## classify without a confidence threshold
+#qiime feature-classifier classify-sklearn \
+#  --i-classifier NBclassifier.qza \
+#  --i-reads rep-seqs.qza \
+#  --p-confidence=disable \
+#  --p-n-jobs $JOBS \
+#  --o-classification taxonomy_no_confidence.qza
+#
+## generate weights
+#qiime clawback generate-class-weights \
+#  --i-reference-taxonomy silva-138.1-ssu-nr99-tax_Euk575-895_derep-uniq.qza \
+#  --i-reference-sequences silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \
+#  --i-samples table.qza \
+#  --i-taxonomy-classification taxonomy_no_confidence.qza \
+#  --o-class-weight Euk575-895_LUCAS_class-weights.qza
+#
+## fit new classifier with weights
+#qiime feature-classifier fit-classifier-naive-bayes \
+#  --i-reference-reads silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \
+#  --i-reference-taxonomy silva-138.1-ssu-nr99-tax_Euk575-895_derep-uniq.qza \
+#  --i-class-weight Euk575-895_LUCAS_class-weights.qza \
+#  --o-classifier weightedNBclassifier.qza
+
+# classify using a confidence threshold of 0.9
+qiime feature-classifier classify-sklearn \
+  --i-classifier NBclassifier.qza \
+  --i-reads rep-seqs.qza \
+  --p-confidence 0.90 \
+  --p-n-jobs $JOBS \
+  --o-classification taxonomy.qza
+
+qiime taxa barplot \
+  --i-table table.qza \
+  --i-taxonomy taxonomy.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization Barplot.qzv
+
+
+```
 
 
 
