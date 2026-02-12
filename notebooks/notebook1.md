@@ -165,9 +165,9 @@ You will learn to perform metabarcoding analysis using a small subset of the dat
 
 ![LUCAS sampling points.](https://github.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/blob/main/img/LUCAS_sampling.jpg?raw=true)
 
-You can download the subsample of LUCAS data that we will use in the analisis [here..missing.link..](missing.link)
+You can download the subsample of LUCAS data and metadata that we will use in the analisis [here..missing.link..](missing.link)
 > [!NOTE]
-> STILL HAVE TO ADD LINK TO DOWNLOAD DATA
+> STILL HAVE TO ADD LINK TO DOWNLOAD DATA AND METADATA
 
 ---
 
