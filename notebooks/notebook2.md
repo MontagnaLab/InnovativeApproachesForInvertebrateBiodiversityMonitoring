@@ -313,27 +313,95 @@ qiime tools import \
 Create a visualization (QZV) of the imported sequences.
 ```bash
 qiime demux summarize \
-  --i-data seqs.qza \
-  --o-visualization seqs.qzv
+  --i-data seqs.qza \ # input file
+  --o-visualization seqs.qzv # output file
 ```
 ℹ️ QIIME2 QZV files can be visualized using the command `qiime tools view <filename.qzv>` or using the [online visualizer](https://view.qiime2.org/).
 
 
 If you remember the quality check reports thare are still some Illumina adapter in the sequences, it is better to remove them using [q2-cutadapt](https://github.com/qiime2/q2-cutadapt)
 ```bash
-# remove illumina adapters
 qiime cutadapt trim-paired \
-  --i-demultiplexed-sequences seqs.qza \
-  --p-cores $JOBS \
-  --p-adapter-f AGATCGGAAGAG \
-  --p-adapter-r AGATCGGAAGAG \
-  --o-trimmed-sequences seqs_trimmed.qza \
+  --i-demultiplexed-sequences seqs.qza \ # input file
+  --p-cores $JOBS \ # number of concurrent processes
+  --p-adapter-f AGATCGGAAGAG \ # adapter sequence
+  --p-adapter-r AGATCGGAAGAG \ # adapter sequence
+  --o-trimmed-sequences seqs_trimmed.qza \ # output file
   --verbose
-qiime demux summarize \
-  --i-data seqs_trimmed.qza \
-  --o-visualization seqs_trimmed.qzv
 ```
 
+### 2.5 Denoising and sequence re-orientation
+
+We are now ready for removing non-biological variation from our data. We use the [DADA2 algorithm](https://benjjneb.github.io/dada2/) implemented in [q2-dada2](https://github.com/qiime2/q2-dada2) that models and corrects sequencing errors to infer exact biological sequences (amplicon sequence variants, ASVs).
+
+```bash
+qiime dada2 denoise-paired \
+  --i-demultiplexed-seqs seqs_trimmed.qza \ # input file
+  --p-trim-left-f 18 \ # forward primer length
+  --p-trim-left-r 18 \ # reverse primer length
+  --p-trunc-len-f 220 \ # position for forward reads truncation
+  --p-trunc-len-r 200 \ # position for reverse reads truncation
+  --p-max-ee-f 2 \ # max expected error for forward reads
+  --p-max-ee-r 2 \ # max expected error for reverse reads
+  --p-trunc-q 2 \ # quality threshold for reads truncation
+  --p-pooling-method 'pseudo' \ # pooling method for denoising
+  --p-chimera-method 'consensus' \ # method for chimera removal
+  --p-n-reads-learn 1000000 \ # number of reads used for training the error model
+  --p-n-threads $JOBS \ # number of concurrent processes
+  --o-table table_MixedOrientation.qza \ # output file with the ASV table
+  --o-representative-sequences rep-seqs_MixedOrientation.qza \ # output file with the ASV sequences
+  --o-denoising-stats denoising-stats.qza \ output file with the denoising stats
+  --verbose
+```
+❗In real life scenarios you should experiment with `--p-trunc-len-f` and `--p-trunc-len-r` parameters and compare the results (in terms of number of retained sequences per sample and sequences length) to choose the best values.
+
+Now let's create visualizations for the outputs of the DADA2 algorithm.
+```bash
+# stats visualization
+qiime metadata tabulate \
+  --m-input-file denoising-stats.qza \
+  --o-visualization denoising-stats.qzv
+
+# table visualization
+qiime feature-table summarize \
+  --i-table table_MixedOrientation.qza \
+  --o-visualization table_MixedOrientation.qzv
+
+# sequences visualization
+qiime feature-table tabulate-seqs \
+  --i-data rep-seqs_MixedOrientation.qza \
+  --o-visualization rep-seqs_MixedOrientation.qzv
+```
+Let's have a look at these three visualizations.
+
+Since in this study barcodes and adapters were added after PCR amplification each fastq file contained both forward and reverse reads. So sequences needs to be re-orientered using the reference database as guide. We can use again the [q2-RESCRIPt](https://github.com/bokulich-lab/RESCRIPt) plugin for doing it.
+```bash
+qiime rescript orient-seqs \
+  --i-sequences rep-seqs_MixedOrientation.qza \ # input file with sequences in mixed orientation
+  --i-reference-sequences silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \ # reference database
+  --o-oriented-seqs rep-seqs.qza \ # output file with reoriented sequences 
+  --o-unmatched-seqs orientation_unmatched_sequences.qza \ # output file with unmatched sequences
+  --p-threads $JOBS # # number of concurrent processes
+```
+
+Exclude unmatched sequences from the ASV table.
+```bash
+qiime feature-table filter-features \
+  --i-table table_MixedOrientation.qza \ # input table with all ASVs
+  --m-metadata-file orientation_unmatched_sequences.qza \ # file with unmatched sequences
+  --p-exclude-ids \ # exclude ASVs present in the metadata
+  --o-filtered-table table.qza # output table without unmatched sequences
+```
+
+Create new visualizations for the clean ASV table and ASV sequences files.
+```bash
+qiime feature-table tabulate-seqs \
+  --i-data rep-seqs.qza \
+  --o-visualization rep-seqs.qzv
+qiime feature-table summarize \
+  --i-table table.qza \
+  --o-visualization table.qzv
+```
 
 
 ---
@@ -356,87 +424,11 @@ qiime demux summarize \
 
 
 
-#### 4.2. Import sequences and remove remaining Illumina adapters
-```bash
-# import sequences
-qiime tools import \
-  --type 'SampleData[PairedEndSequencesWithQuality]' \
-  --input-path manifest.tsv \
-  --output-path seqs.qza \
-  --input-format PairedEndFastqManifestPhred33V2
-qiime demux summarize \
-  --i-data seqs.qza \
-  --o-visualization seqs.qzv
-
-# remove illumina adapters
-qiime cutadapt trim-paired \
-  --i-demultiplexed-sequences seqs.qza \
-  --p-cores $JOBS \
-  --p-adapter-f AGATCGGAAGAG \
-  --p-adapter-r AGATCGGAAGAG \
-  --o-trimmed-sequences seqs_trimmed.qza \
-  --verbose
-qiime demux summarize \
-  --i-data seqs_trimmed.qza \
-  --o-visualization seqs_trimmed.qzv
-```
-
 ---
 
-## **5. Denoising and sequence re-orientation**
-Since barcodes and adapters were added after PCR amplification each fastq file contained both forward and reverse reads. So sequences were re-orientered using the reference database as guide.
 
-#### 5.1. Denoising with DADA2
-```bash
-qiime dada2 denoise-paired \
-  --i-demultiplexed-seqs seqs_trimmed.qza \
-  --p-trim-left-f 18 \
-  --p-trim-left-r 18 \
-  --p-trunc-len-f 220 \
-  --p-trunc-len-r 200 \
-  --p-max-ee-f 2 \
-  --p-max-ee-r 2 \
-  --p-trunc-q 2 \
-  --p-pooling-method 'pseudo' \
-  --p-chimera-method 'pooled' \
-  --p-n-reads-learn 30000000 \
-  --p-n-threads $JOBS \
-  --o-table table_MixedOrientation.qza \
-  --o-representative-sequences rep-seqs_MixedOrientation.qza \
-  --o-denoising-stats denoising-stats.qza \
-  --verbose
-qiime metadata tabulate \
-  --m-input-file denoising-stats.qza \
-  --o-visualization denoising-stats.qzv
-qiime feature-table summarize \
-  --i-table table_MixedOrientation.qza \
-  --o-visualization table_MixedOrientation.qzv
-qiime feature-table tabulate-seqs \
-  --i-data rep-seqs_MixedOrientation.qza \
-  --o-visualization rep-seqs_MixedOrientation.qzv
-```
-#### 5.2. Re-orientering sequences using the reference database
-```bash
-# re-orient sequences
-qiime rescript orient-seqs \
-  --i-sequences rep-seqs_MixedOrientation.qza \
-  --i-reference-sequences silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \
-  --o-oriented-seqs rep-seqs.qza \
-  --o-unmatched-seqs orientation_unmatched_sequences.qza \
-  --p-threads $JOBS
-qiime feature-table tabulate-seqs \
-  --i-data rep-seqs.qza \
-  --o-visualization rep-seqs.qzv
-# exclude not oriented sequences
-qiime feature-table filter-features \
-  --i-table table_MixedOrientation.qza \
-  --m-metadata-file orientation_unmatched_sequences.qza \
-  --p-exclude-ids \
-  --o-filtered-table table.qza
-qiime feature-table summarize \
-  --i-table table.qza \
-  --o-visualization table.qzv
-```
+
+
 
 ---
 
