@@ -189,7 +189,7 @@ Close Rstudio or the R terminal and **go back to the bash terminal** with the QI
 to import the cleaned SILVA taxonomy as a QIIME2 artifact.
 ```bash
 qiime tools import \
-  --type FeatureData[Taxonomy] \ # the type of artifact to be created
+  --type FeatureData[Taxonomy] \ # type of artifact to be created
   --input-path silva-138.1-ssu-nr99-tax-cleaned.tsv \ # path to the file to be imported
   --input-format HeaderlessTSVTaxonomyFormat \ # format of the file to be imported
   --output-path silva-138.1-ssu-nr99-tax-cleaned.qza # output file
@@ -292,6 +292,48 @@ rm *.txt
 # move the manifest file to the working directory #
 mv manifest.tsv "$WORKDIR"/manifest.tsv
 ```
+
+Let's have a look at the content of the manifest file to check that everything is ok.
+
+#### 2.4.2. Import sequences
+Now we can use the manifest file to import sequences in QIIME2. First move back to the working directory.
+```bash
+cd $WORKDIR
+```
+
+Import the sequences in a QZA file.
+```bash
+qiime tools import \
+  --type 'SampleData[PairedEndSequencesWithQuality]' \ # type of artifact to be created
+  --input-path manifest.tsv \ # manifest file
+  --output-path seqs.qza \ # output file
+  --input-format PairedEndFastqManifestPhred33V2 # format of the file to be imported
+```
+
+Create a visualization (QZV) of the imported sequences.
+```bash
+qiime demux summarize \
+  --i-data seqs.qza \
+  --o-visualization seqs.qzv
+```
+ℹ️ QIIME2 QZV files can be visualized using the command `qiime tools view <filename.qzv>` or using the [online visualizer](https://view.qiime2.org/).
+
+
+If you remember the quality check reports thare are still some Illumina adapter in the sequences, it is better to remove them using [q2-cutadapt](https://github.com/qiime2/q2-cutadapt)
+```bash
+# remove illumina adapters
+qiime cutadapt trim-paired \
+  --i-demultiplexed-sequences seqs.qza \
+  --p-cores $JOBS \
+  --p-adapter-f AGATCGGAAGAG \
+  --p-adapter-r AGATCGGAAGAG \
+  --o-trimmed-sequences seqs_trimmed.qza \
+  --verbose
+qiime demux summarize \
+  --i-data seqs_trimmed.qza \
+  --o-visualization seqs_trimmed.qzv
+```
+
 
 
 ---
