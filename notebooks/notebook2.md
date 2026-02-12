@@ -372,8 +372,7 @@ qiime rescript orient-seqs \
   --i-sequences rep-seqs_MixedOrientation.qza \
   --i-reference-sequences silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \
   --o-oriented-seqs rep-seqs.qza \
-  --o-unmatched-seqs orientation_unmatched_sequences.qza \
-  --p-threads $JOBS
+  --o-unmatched-seqs orientation_unmatched_sequences.qza
 ```
 
 Exclude unmatched sequences from the ASV table.
