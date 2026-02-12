@@ -91,31 +91,31 @@ for managing and curating reference sequence databases.
 **Download** the SILVA RNA sequences and the associated taxonomic labels.
 ```bash
 qiime rescript get-silva-data \
-  --p-version '138.1' \ # SILVA database version
-  --p-target 'SSURef_NR99' \ # target reference sequences, in this case 99% similarity non-redundant SSU
-  --p-include-species-labels \ # include species-level labels
-  --p-no-rank-propagation \ # do not fill missing ranks with the taxonomy from upper-level ranks 
-  --parallel \ # run in parallel
-  --o-silva-sequences silva-138.1-ssu-nr99-rna-seqs.qza \ # QIIME2 output for the sequences
-  --o-silva-taxonomy silva-138.1-ssu-nr99-tax.qza \ # QIIME2 output for the taxonomc labels
+  --p-version '138.1' \
+  --p-target 'SSURef_NR99' \
+  --p-include-species-labels \
+  --p-no-rank-propagation \
+  --parallel \
+  --o-silva-sequences silva-138.1-ssu-nr99-rna-seqs.qza \
+  --o-silva-taxonomy silva-138.1-ssu-nr99-tax.qza \
   --verbose
 ```
 
 **Reverse-transcribe** the RNA sequences to obtain the corresponding DNA sequences.
 ```bash
 qiime rescript reverse-transcribe \
-  --i-rna-sequences silva-138.1-ssu-nr99-rna-seqs.qza \ # input RNA sequences
-  --o-dna-sequences silva-138.1-ssu-nr99-seqs.qza # output DNA sequences
+  --i-rna-sequences silva-138.1-ssu-nr99-rna-seqs.qza \
+  --o-dna-sequences silva-138.1-ssu-nr99-seqs.qza
 ```
 
 **Remove low quality sequences**, in this case those with 5 or more degenerated bases 
 and/or containing homopolymers with 8 or more bases)
 ```bash
 qiime rescript cull-seqs \
-  --i-sequences silva-138.1-ssu-nr99-seqs.qza \ # input DNA sequences
-  --p-num-degenerates 5 \ # number of degenerated bases
-  --p-homopolymer-length 8 \ # homopolymer length
-  --o-clean-sequences silva-138.1-ssu-nr99-seqs-cleaned.qza \ # output clean DNA sequences
+  --i-sequences silva-138.1-ssu-nr99-seqs.qza \
+  --p-num-degenerates 5 \
+  --p-homopolymer-length 8 \
+  --o-clean-sequences silva-138.1-ssu-nr99-seqs-cleaned.qza \
   --p-n-jobs $JOBS # number of concurrent processes
 ```
 
@@ -189,10 +189,10 @@ Close Rstudio or the R terminal and **go back to the bash terminal** with the QI
 to import the cleaned SILVA taxonomy as a QIIME2 artifact.
 ```bash
 qiime tools import \
-  --type FeatureData[Taxonomy] \ # type of artifact to be created
-  --input-path silva-138.1-ssu-nr99-tax-cleaned.tsv \ # path to the file to be imported
-  --input-format HeaderlessTSVTaxonomyFormat \ # format of the file to be imported
-  --output-path silva-138.1-ssu-nr99-tax-cleaned.qza # output file
+  --type FeatureData[Taxonomy] \
+  --input-path silva-138.1-ssu-nr99-tax-cleaned.tsv \
+  --input-format HeaderlessTSVTaxonomyFormat \
+  --output-path silva-138.1-ssu-nr99-tax-cleaned.qza
 ```
 
 
@@ -202,23 +202,23 @@ Next we **remove** database entries with **too short SSU sequences** depending o
 In this case we use a minimum length threshold of 900 bp for Archaea, 1200 bp for Bacteria and 1400 bp for Eukaryota.
 ```bash
 qiime rescript filter-seqs-length-by-taxon \
-  --i-sequences silva-138.1-ssu-nr99-seqs-cleaned.qza \ # input sequences
-  --i-taxonomy silva-138.1-ssu-nr99-tax-cleaned.qza \ # input taxonomy
-  --p-labels Archaea Bacteria Eukaryota \ # taxonomic labels for conditional filtering
-  --p-min-lens 900 1200 1400 \ # minimum length thresholds
-  --o-filtered-seqs silva-138.1-ssu-nr99-seqs-filt.qza \ # output sequences
-  --o-discarded-seqs silva-138.1-ssu-nr99-seqs-discard.qza # output taxonomy
+  --i-sequences silva-138.1-ssu-nr99-seqs-cleaned.qza \
+  --i-taxonomy silva-138.1-ssu-nr99-tax-cleaned.qza \
+  --p-labels Archaea Bacteria Eukaryota \
+  --p-min-lens 900 1200 1400 \
+  --o-filtered-seqs silva-138.1-ssu-nr99-seqs-filt.qza \
+  --o-discarded-seqs silva-138.1-ssu-nr99-seqs-discard.qza
 ```
 
 Next, we **dereplicate entries** with the same taxonomic ID to remove redundance.
 ```bash
 qiime rescript dereplicate \
-  --i-sequences silva-138.1-ssu-nr99-seqs-filt.qza \ # input sequences
-  --i-taxa silva-138.1-ssu-nr99-tax-cleaned.qza \ # input taxonomy
-  --p-mode 'uniq' \ # retain all sequences with unique taxonomic affiliations
-  --o-dereplicated-sequences silva-138.1-ssu-nr99-seqs-derep-uniq.qza \ # output sequence
-  --o-dereplicated-taxa silva-138.1-ssu-nr99-tax-derep-uniq.qza \ # output taxonomy
-  --p-threads $JOBS # number of concurrent processes
+  --i-sequences silva-138.1-ssu-nr99-seqs-filt.qza \
+  --i-taxa silva-138.1-ssu-nr99-tax-cleaned.qza \
+  --p-mode 'uniq' \
+  --o-dereplicated-sequences silva-138.1-ssu-nr99-seqs-derep-uniq.qza \
+  --o-dereplicated-taxa silva-138.1-ssu-nr99-tax-derep-uniq.qza \
+  --p-threads $JOBS
 ```
 
 
@@ -228,26 +228,26 @@ To optimize taxonomic classification and reduce database complexity we can **tri
 to contain only the region actually amplified by the primers used in this study.
 ```bash
 qiime feature-classifier extract-reads \
-  --i-sequences silva-138.1-ssu-nr99-seqs-derep-uniq.qza \ # input sequences
-  --p-f-primer ASCYGYGGTAAYWCCAGC \ # forward primer
-  --p-r-primer TCHNHGNATTTCACCNCT \ # reverse primer
-  --p-identity 0.8 \ # minimum combined primer match identity threshold
-  --p-min-length 150 \ # minimum amplicon length
-  --p-max-length 450 \ # maximum amplicon length
-  --p-n-jobs $JOBS \ # number of concurrent processes
-  --p-read-orientation forward \ # orientation of primers relative to the sequences
-  --o-reads silva-138.1-ssu-nr99-seqs_Euk575-895.qza # output sequences
+  --i-sequences silva-138.1-ssu-nr99-seqs-derep-uniq.qza \
+  --p-f-primer ASCYGYGGTAAYWCCAGC \
+  --p-r-primer TCHNHGNATTTCACCNCT \
+  --p-identity 0.8 \
+  --p-min-length 150 \
+  --p-max-length 450 \
+  --p-n-jobs $JOBS \
+  --p-read-orientation forward \
+  --o-reads silva-138.1-ssu-nr99-seqs_Euk575-895.qza
 ```
 
 **Dereplicate** again (since some of these shorter sequences may be identical now) to remove redundance.
 ```bash
 qiime rescript dereplicate \
-  --i-sequences silva-138.1-ssu-nr99-seqs_Euk575-895.qza  \ # input sequences
-  --i-taxa silva-138.1-ssu-nr99-tax-derep-uniq.qza \ #input taxonomy
-  --p-mode 'uniq' \ # retain all sequences with unique taxonomic affiliations
-  --o-dereplicated-sequences silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \ # output sequences
-  --o-dereplicated-taxa silva-138.1-ssu-nr99-tax_Euk575-895_derep-uniq.qza \ # output taxonomy
-  --p-threads $JOBS # number of concurrent processes
+  --i-sequences silva-138.1-ssu-nr99-seqs_Euk575-895.qza \
+  --i-taxa silva-138.1-ssu-nr99-tax-derep-uniq.qza \
+  --p-mode 'uniq' \
+  --o-dereplicated-sequences silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \
+  --o-dereplicated-taxa silva-138.1-ssu-nr99-tax_Euk575-895_derep-uniq.qza \
+  --p-threads $JOBS
 ```
 
 
@@ -304,17 +304,17 @@ cd $WORKDIR
 Import the sequences in a QZA file.
 ```bash
 qiime tools import \
-  --type 'SampleData[PairedEndSequencesWithQuality]' \ # type of artifact to be created
-  --input-path manifest.tsv \ # manifest file
-  --output-path seqs.qza \ # output file
-  --input-format PairedEndFastqManifestPhred33V2 # format of the file to be imported
+  --type 'SampleData[PairedEndSequencesWithQuality]' \
+  --input-path manifest.tsv \
+  --output-path seqs.qza \
+  --input-format PairedEndFastqManifestPhred33V2
 ```
 
 Create a visualization (QZV) of the imported sequences.
 ```bash
 qiime demux summarize \
-  --i-data seqs.qza \ # input file
-  --o-visualization seqs.qzv # output file
+  --i-data seqs.qza \
+  --o-visualization seqs.qzv
 ```
 ℹ️ QIIME2 QZV files can be visualized using the command `qiime tools view <filename.qzv>` or using the [online visualizer](https://view.qiime2.org/).
 
@@ -322,35 +322,38 @@ qiime demux summarize \
 If you remember the quality check reports thare are still some Illumina adapter in the sequences, it is better to remove them using [q2-cutadapt](https://github.com/qiime2/q2-cutadapt)
 ```bash
 qiime cutadapt trim-paired \
-  --i-demultiplexed-sequences seqs.qza \ # input file
-  --p-cores $JOBS \ # number of concurrent processes
-  --p-adapter-f AGATCGGAAGAG \ # adapter sequence
-  --p-adapter-r AGATCGGAAGAG \ # adapter sequence
-  --o-trimmed-sequences seqs_trimmed.qza \ # output file
+  --i-demultiplexed-sequences seqs.qza \
+  --p-cores $JOBS \
+  --p-adapter-f AGATCGGAAGAG \
+  --p-adapter-r AGATCGGAAGAG \
+  --o-trimmed-sequences seqs_trimmed.qza \
   --verbose
 ```
 
 ### 2.5 Denoising and sequence re-orientation
 
-We are now ready for removing non-biological variation from our data. We use the [DADA2 algorithm](https://benjjneb.github.io/dada2/) implemented in [q2-dada2](https://github.com/qiime2/q2-dada2) that models and corrects sequencing errors to infer exact biological sequences (amplicon sequence variants, ASVs).
+We are now ready for removing non-biological variation from our data. We use the [DADA2 algorithm](https://benjjneb.github.io/dada2/) implemented in [q2-dada2](https://github.com/qiime2/q2-dada2) that models and corrects sequencing errors to infer exact biological sequences (amplicon sequence variants, ASVs). The most important parameters are:
+- `--p-trim-left-f` and `--p-trim-left-r`, corresponding to the length of the forward and reverse primer respectively
+-  `--p-trunc-len-f` and `--p-trunc-len-r`, corresponding to the length at which to trunc the sequences due to the quality drop
 
 ```bash
 qiime dada2 denoise-paired \
-  --i-demultiplexed-seqs seqs_trimmed.qza \ # input file
-  --p-trim-left-f 18 \ # forward primer length
-  --p-trim-left-r 18 \ # reverse primer length
-  --p-trunc-len-f 220 \ # position for forward reads truncation
-  --p-trunc-len-r 200 \ # position for reverse reads truncation
-  --p-max-ee-f 2 \ # max expected error for forward reads
-  --p-max-ee-r 2 \ # max expected error for reverse reads
-  --p-trunc-q 2 \ # quality threshold for reads truncation
-  --p-pooling-method 'pseudo' \ # pooling method for denoising
-  --p-chimera-method 'consensus' \ # method for chimera removal
-  --p-n-reads-learn 1000000 \ # number of reads used for training the error model
-  --p-n-threads $JOBS \ # number of concurrent processes
-  --o-table table_MixedOrientation.qza \ # output file with the ASV table
-  --o-representative-sequences rep-seqs_MixedOrientation.qza \ # output file with the ASV sequences
-  --o-denoising-stats denoising-stats.qza \ output file with the denoising stats
+  --i-demultiplexed-seqs seqs_trimmed.qza \
+  --p-trim-left-f 18 \
+  --p-trim-left-r 18 \
+  --p-trunc-len-f 220 \
+  --p-trunc-len-r 200 \
+  --p-max-ee-f 2 \
+  --p-max-ee-r 2 \
+  --p-trunc-q 2 \
+  --p-pooling-method 'pseudo' \
+  --p-chimera-method 'consensus' \
+  --p-n-reads-learn 1000000 \
+  --p-n-threads $JOBS \
+  --o-table table_MixedOrientation.qza \
+  --o-representative-sequences rep-seqs_MixedOrientation.qza \
+  --o-denoising-stats denoising-stats.qza \
+  --o-base-transition-stats base-transition-stats.qza \
   --verbose
 ```
 ❗In real life scenarios you should experiment with `--p-trunc-len-f` and `--p-trunc-len-r` parameters and compare the results (in terms of number of retained sequences per sample and sequences length) to choose the best values.
@@ -366,20 +369,20 @@ Let's have a look at this visualization.
 Since in this study barcodes and adapters were added after PCR amplification each fastq file contained both forward and reverse reads. So sequences needs to be re-orientered using the reference database as guide. We can use again the [q2-RESCRIPt](https://github.com/bokulich-lab/RESCRIPt) plugin for doing it.
 ```bash
 qiime rescript orient-seqs \
-  --i-sequences rep-seqs_MixedOrientation.qza \ # input file with sequences in mixed orientation
-  --i-reference-sequences silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \ # reference database
-  --o-oriented-seqs rep-seqs.qza \ # output file with reoriented sequences 
-  --o-unmatched-seqs orientation_unmatched_sequences.qza \ # output file with unmatched sequences
-  --p-threads $JOBS # # number of concurrent processes
+  --i-sequences rep-seqs_MixedOrientation.qza \
+  --i-reference-sequences silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \
+  --o-oriented-seqs rep-seqs.qza \
+  --o-unmatched-seqs orientation_unmatched_sequences.qza \
+  --p-threads $JOBS
 ```
 
 Exclude unmatched sequences from the ASV table.
 ```bash
 qiime feature-table filter-features \
-  --i-table table_MixedOrientation.qza \ # input table with all ASVs
-  --m-metadata-file orientation_unmatched_sequences.qza \ # file with unmatched sequences
-  --p-exclude-ids \ # exclude ASVs present in the metadata
-  --o-filtered-table table.qza # output table without unmatched sequences
+  --i-table table_MixedOrientation.qza \
+  --m-metadata-file orientation_unmatched_sequences.qza \
+  --p-exclude-ids \
+  --o-filtered-table table.qza
 ```
 
 Create visualizations for the ASV table and ASV sequences files.
