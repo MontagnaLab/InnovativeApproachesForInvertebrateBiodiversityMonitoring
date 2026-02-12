@@ -355,24 +355,13 @@ qiime dada2 denoise-paired \
 ```
 ❗In real life scenarios you should experiment with `--p-trunc-len-f` and `--p-trunc-len-r` parameters and compare the results (in terms of number of retained sequences per sample and sequences length) to choose the best values.
 
-Now let's create visualizations for the outputs of the DADA2 algorithm.
+Now let's create visualizations for the stats of the DADA2 algorithm.
 ```bash
-# stats visualization
 qiime metadata tabulate \
   --m-input-file denoising-stats.qza \
   --o-visualization denoising-stats.qzv
-
-# table visualization
-qiime feature-table summarize \
-  --i-table table_MixedOrientation.qza \
-  --o-visualization table_MixedOrientation.qzv
-
-# sequences visualization
-qiime feature-table tabulate-seqs \
-  --i-data rep-seqs_MixedOrientation.qza \
-  --o-visualization rep-seqs_MixedOrientation.qzv
 ```
-Let's have a look at these three visualizations.
+Let's have a look at this visualization.
 
 Since in this study barcodes and adapters were added after PCR amplification each fastq file contained both forward and reverse reads. So sequences needs to be re-orientered using the reference database as guide. We can use again the [q2-RESCRIPt](https://github.com/bokulich-lab/RESCRIPt) plugin for doing it.
 ```bash
@@ -393,14 +382,17 @@ qiime feature-table filter-features \
   --o-filtered-table table.qza # output table without unmatched sequences
 ```
 
-Create new visualizations for the clean ASV table and ASV sequences files.
+Create visualizations for the ASV table and ASV sequences files.
 ```bash
-qiime feature-table tabulate-seqs \
-  --i-data rep-seqs.qza \
-  --o-visualization rep-seqs.qzv
+# table visualization
 qiime feature-table summarize \
   --i-table table.qza \
   --o-visualization table.qzv
+
+# sequences visualization
+qiime feature-table tabulate-seqs \
+  --i-data rep-seqs.qza \
+  --o-visualization rep-seqs.qzv
 ```
 
 
