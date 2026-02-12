@@ -359,13 +359,19 @@ qiime dada2 denoise-paired \
 ```
 ❗In real life scenarios you should experiment with `--p-trunc-len-f` and `--p-trunc-len-r` parameters and compare the results (in terms of number of retained sequences per sample and sequences length) to choose the best values.
 
-Now let's create visualizations for the stats of the DADA2 algorithm.
+Now let's create visualizations for the two stats files of the DADA2 algorithm.
 ```bash
+# visualize denoising stats
 qiime metadata tabulate \
   --m-input-file denoising-stats.qza \
   --o-visualization denoising-stats.qzv
+
+# visualize base transition stats
+qiime dada2 plot-base-transitions \
+  --i-base-transition-stats base-transition-stats.qza \
+  --o-visualization base-transition-stats.qzv
 ```
-Let's have a look at this visualization.
+Let's have a look at these visualizations.
 
 Since in this study barcodes and adapters were added after PCR amplification each fastq file contained both forward and reverse reads. So sequences needs to be re-orientered using the reference database as guide. We can use again the [q2-RESCRIPt](https://github.com/bokulich-lab/RESCRIPt) plugin for doing it.
 ```bash
