@@ -469,20 +469,7 @@ qiime feature-table filter-features \
 ```
 
 
-```bash
-# export table (ASVs abundance per sample)
-qiime tools export \
-  --input-path table.qza \
-  --output-path exp
-biom convert -i exp/feature-table.biom -o table.tsv --to-tsv
 
-# export taxonomy (ASVs taxonomic assignments)
-qiime tools export \
-  --input-path taxonomy.qza \
-  --output-path exp
-mv exp/taxonomy.tsv taxonomy.tsv
-
-```
 
 ---
 
@@ -509,21 +496,58 @@ mv exp/taxonomy.tsv taxonomy.tsv
 
 ---
 
-## **7. Final filtering and exporting the results**
 
 ```bash
-# remove singletons
-qiime feature-table filter-features \
-  --i-table table.qza \
-  --p-min-frequency 2 \
-  --o-filtered-table table.qza
 
-# remove non-metazoan ASVs
-qiime taxa filter-table \
-  --i-table table.qza \
-  --i-taxonomy taxonomy.qza \
-  --p-include 'd__Eukaryota(Metazoa)' \
-  --o-filtered-table table.qza
+qiime feature-table summarize \
+  --i-table invertebrates_table_clean.qza \
+  --m-sample-metadata-file metadata.tsv \
+  --o-visualization invertebrates_table_clean.qzv
+
+
+
+
+
+pip install gemelli
+qiime dev refresh-cache
+
+qiime gemelli rpca \
+  --i-table invertebrates_table_clean.qza \
+  --p-n-components 3 \
+  --p-min-sample-count 1000 \
+  --p-min-feature-count 30 \
+  --p-min-feature-frequency 0 \
+  --p-max-iterations 5 \
+  --o-biplot RPCA_biplot.qza \
+  --o-distance-matrix RPCA_distance_matrix.qza
+
+qiime emperor biplot \
+    --i-biplot RPCA_biplot.qza \
+    --m-sample-metadata-file metadata.tsv \
+    --m-feature-metadata-file taxonomy.qza \
+    --o-visualization RPCA_biplot.qzv \
+    --p-number-of-features 5
+
+
+qiime diversity core-metrics \
+  --i-table invertebrates_table_clean.qza \
+  --p-sampling-depth 8167 \
+  --m-metadata-file metadata.tsv \
+  --p-n-jobs $JOBS \
+  --output-dir prova_diversity_core
+
+```
+
+
+
+
+
+
+
+## **exporting the results**
+
+
+```bash
 
 # export table (ASVs abundance per sample)
 qiime tools export \
