@@ -331,7 +331,7 @@ qiime cutadapt trim-paired \
   --verbose
 ```
 
-### 2.5 Denoising and sequence re-orientation
+### 2.5. Denoising and sequence re-orientation
 
 We are now ready for removing non-biological variation from our data. We use the [DADA2 algorithm](https://benjjneb.github.io/dada2/) implemented in [q2-dada2](https://github.com/qiime2/q2-dada2) that models and corrects sequencing errors to infer exact biological sequences (amplicon sequence variants, ASVs). The most important parameters are:
 - `--p-trim-left-f` and `--p-trim-left-r`, corresponding to the length of the forward and reverse primer respectively
@@ -406,7 +406,7 @@ qiime feature-table tabulate-seqs \
 ```
 
 
-### 2.6 Taxonomic classification
+### 2.6. Taxonomic classification
 Now we are ready for the taxonomic classification. There are different methods in the [q2-feature-classfifier](https://github.com/qiime2/q2-feature-classifier?tab=readme-ov-file) plugin for this, we will use a machine learning approach with a naive bayes classifier. First of all let's train a classifier on the SILVA reference database that we built before.
 ```bash
 qiime feature-classifier fit-classifier-naive-bayes \
@@ -440,8 +440,49 @@ Let's have a look at this barplot.
 
 
 
+### 2.7. Final filtering
+
+As you can see in the barplot there are several non-invertebrate taxa, this is due to the use of primers that are not specific for invertebrates. Now let's filter the table to keep only the invertebrate taxa of our interest: nematodes, arthropods, tardigrads, annelids, rotifers, and flatworms. 
+```bash
+qiime taxa filter-table \
+  --i-table table.qza \
+  --i-taxonomy taxonomy.qza \
+  --p-include Nematozoa,Arthropoda,Tardigrada,Annelida,Rotifera,Platyhelminthes \
+  --o-filtered-table invertebrates_table.qza
+```
+
+Then generate a new barplot.
+```bash
+qiime taxa barplot \
+  --i-table invertebrates_table.qza \
+  --i-taxonomy taxonomy.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization invertebrates_Barplot.qzv
+```
+
+Then to reduce the noise we remove all the ASVs with less than 10 observations.
+```bash
+qiime feature-table filter-features \
+  --i-table invertebrates_table.qza \
+  --p-min-frequency 10 \
+  --o-filtered-table invertebrates_table_clean.qza
+```
 
 
+```bash
+# export table (ASVs abundance per sample)
+qiime tools export \
+  --input-path table.qza \
+  --output-path exp
+biom convert -i exp/feature-table.biom -o table.tsv --to-tsv
+
+# export taxonomy (ASVs taxonomic assignments)
+qiime tools export \
+  --input-path taxonomy.qza \
+  --output-path exp
+mv exp/taxonomy.tsv taxonomy.tsv
+
+```
 
 ---
 
@@ -467,48 +508,6 @@ Let's have a look at this barplot.
 
 
 ---
-
-## **6. Taxonomic classification**
-
-```bash
-# fit a classifier
-qiime feature-classifier fit-classifier-naive-bayes \
-  --i-reference-reads silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \
-  --i-reference-taxonomy silva-138.1-ssu-nr99-tax_Euk575-895_derep-uniq.qza \
-  --o-classifier NBclassifier.qza
-
-# classify without a confidence threshold
-qiime feature-classifier classify-sklearn \
-  --i-classifier NBclassifier.qza \
-  --i-reads rep-seqs.qza \
-  --p-confidence=disable \
-  --p-n-jobs $JOBS \
-  --o-classification taxonomy_no_confidence.qza
-
-# generate weights
-qiime clawback generate-class-weights \
-  --i-reference-taxonomy silva-138.1-ssu-nr99-tax_Euk575-895_derep-uniq.qza \
-  --i-reference-sequences silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \
-  --i-samples table.qza \
-  --i-taxonomy-classification taxonomy_no_confidence.qza \
-  --o-class-weight class-weights.qza
-
-# fit new classifier with weights
-qiime feature-classifier fit-classifier-naive-bayes \
-  --i-reference-reads silva-138.1-ssu-nr99-seqs_Euk575-895_derep-uniq.qza \
-  --i-reference-taxonomy silva-138.1-ssu-nr99-tax_Euk575-895_derep-uniq.qza \
-  --i-class-weight Euk575-895_LUCAS_class-weights.qza \
-  --o-classifier weightedNBclassifier.qza
-
-# classify using a confidence threshold of 0.9
-qiime feature-classifier classify-sklearn \
-  --i-classifier weightedNBclassifier.qza \
-  --i-reads rep-seqs.qza \
-  --p-confidence 0.90 \
-  --p-n-jobs $JOBS \
-  --o-classification taxonomy.qza
-
-```
 
 ## **7. Final filtering and exporting the results**
 
