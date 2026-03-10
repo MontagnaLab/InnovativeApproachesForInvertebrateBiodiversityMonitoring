@@ -1,3 +1,11 @@
+# Bioinformatic analysis of metabarcoding data for soil invertebrates
+
+## 3. Statistical analyses
+
+### 3.1. Alpha diversity
+Alpha diversity refers to the diversity within a single sample or community, typically measured as the number and relative abundance of taxa present.
+
+
 
 ```bash
 
