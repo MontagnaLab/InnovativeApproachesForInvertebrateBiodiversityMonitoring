@@ -295,22 +295,25 @@ mv manifest.tsv "$WORKDIR"/manifest.tsv
 Let's have a look at the content of the manifest file to check that everything is ok.
 
 #### 2.4.2. Import sequences
-Now we can use the manifest file to import sequences in QIIME2. First move back to the working directory.
+First move back to the working directory.
 ```bash
 cd $WORKDIR
 ```
 
-Import the sequences in a QZA file.
-- `--type` specify the type of qiime2 artifact to be created, you can use `qiime tools list-types` to see all the importable types available.
+Now we can use the manifest file to import sequences in QIIME2 with `qiime tools import`.
+
+The main parameters of this command are:
+- `--type` specifies the type of qiime2 artifact to be created, you can use `qiime tools list-types` to see all the importable types available.
+- `--input-format` specifies the format of the data to be imported, you can use `qiime tools list-formats` to see all the input data format available
 ```bash
 qiime tools import \
   --type 'SampleData[PairedEndSequencesWithQuality]' \
+  --input-format PairedEndFastqManifestPhred33V2 \
   --input-path manifest.tsv \
-  --output-path seqs.qza \
-  --input-format PairedEndFastqManifestPhred33V2
+  --output-path seqs.qza 
 ```
 
-Create a visualization (QZV) of the imported sequences.
+Create a visualization (QZV) of the imported sequences with `qiime demux summarize`.
 ```bash
 qiime demux summarize \
   --i-data seqs.qza \
