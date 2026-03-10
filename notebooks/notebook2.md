@@ -567,32 +567,24 @@ done
 
 
 
-
-
-
-
-
-
-
-
 pip install gemelli
 qiime dev refresh-cache
 
 qiime gemelli rpca \
-  --i-table invertebrates_table_clean.qza \
+  --i-table FILT_invertebrates_table_clean.qza \
   --p-n-components 3 \
   --p-min-sample-count 1000 \
   --p-min-feature-count 30 \
   --p-min-feature-frequency 0 \
   --p-max-iterations 5 \
-  --o-biplot RPCA_biplot.qza \
-  --o-distance-matrix RPCA_distance_matrix.qza
+  --o-biplot prova_diversity_core_FILT/RPCA_biplot.qza \
+  --o-distance-matrix prova_diversity_core_FILT/RPCA_distance_matrix.qza
 
 qiime emperor biplot \
-    --i-biplot RPCA_biplot.qza \
+    --i-biplot prova_diversity_core_FILT/RPCA_biplot.qza \
     --m-sample-metadata-file metadata.tsv \
     --m-feature-metadata-file taxonomy.qza \
-    --o-visualization RPCA_biplot.qzv \
+    --o-visualization prova_diversity_core_FILT/RPCA_biplot.qzv \
     --p-number-of-features 5
 
 
