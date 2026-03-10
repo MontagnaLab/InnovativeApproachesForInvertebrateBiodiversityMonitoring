@@ -1,0 +1,17 @@
+SampleID	samples	Elevation	Sample_date	Bioregions	Habitat_type	Habitat_type_simpl	Sample_month	Precipitation_in_sample_month	Temperature_in_sample_month	pH	Organic_carbon	P	N	K
+ #q2:types 	categorical	numeric	categorical	categorical	categorical	categorical	categorical	numeric	numeric	numeric	numeric	numeric	numeric	numeric
+Lucas0091	Lucas0091	722	20.05.2018	mediterranean	GL_managed	Grassland	5	70.57280731	13.96049261	5.54	12.3	5.3	1.4	72.1
+Lucas0106	Lucas0106	219	23.05.2018	boreal	CL_annual	Cropland	5	65.43315887	16.71153355	6.52	17.2	56.2	2	254.2
+Lucas0147	Lucas0147	605	23.05.2018	boreal	GL_managed	Grassland	5	56.86676407	14.62813902	6.08	50.6	21.9	4.5	151.4
+Lucas0168	Lucas0168	104	28.05.2018	boreal	CL_annual	Cropland	5	55.86450577	19.77006102	6.69	26.3	10.3	2.4	215
+Lucas0251	Lucas0251	664	14.06.2018	continental	GL_managed	Grassland	6	95.55587006	14.96876383	5.99	27.4	23.6	2.8	156.8
+Lucas0363	Lucas0363	82	29.06.2018	continental	CL_annual	Cropland	6	45.65316772	14.41466188	6.43	26.4	35.8	2.2	128.2
+Lucas0372	Lucas0372	185	04.07.2018	mediterranean	WL_broadleaved	Woodland	7	1.869292378	22.94358397	5.74	12.9	2.1	1.1	52.6
+Lucas0460	Lucas0460	1096	10.07.2018	alpine	CL_permanent	Cropland	7	0.615678251	24.93117857	8.24	12.1	24.7	1	216.2
+Lucas0483	Lucas0483	704	05.06.2018	alpine	GL_managed	Grassland	6	76.5189209	17.67407322	6.33	41.1	27.7	4.2	120.8
+Lucas0620	Lucas0620	489	15.08.2018	continental	WL_broadleaved	Woodland	8	44.53385544	22.36270428	5.29	36.7	10.2	3.5	246.2
+Lucas0650	Lucas0650	1007	19.08.2018	continental	WL_broadleaved	Woodland	8	88.04823303	19.20844889	6.13	30	11	3	113.1
+Lucas0698	Lucas0698	659	27.08.2018	mediterranean	CL_annual	Cropland	8	9.111838341	27.32667637	8.1	9.9	29.5	1.1	273
+Lucas0706	Lucas0706	1300	27.08.2018	mediterranean	WL_broadleaved	Woodland	8	4.974109173	21.35056114	5.57	65.2	20.4	5.6	245.2
+Lucas0738	Lucas0738	1413	23.09.2018	boreal	WL_coniferous	Woodland	9	49.69207001	15.80679512	5.46	27.8	17.9	1.6	108.1
+Lucas0832	Lucas0832	211	03.10.2018	atlantic	GL_unmanaged	Grassland	10	206.8156586	8.640706778	4.93	40.1	6.3	2.6	90.4
