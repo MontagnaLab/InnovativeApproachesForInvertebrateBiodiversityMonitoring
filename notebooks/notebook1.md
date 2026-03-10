@@ -108,7 +108,7 @@ Follow the instructions for your operating system.
         conda update conda
         ```
     
-    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2025.4' to indicate what QIIME2 release is installed .
+    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2025.4' to indicate what QIIME2 release is installed.
     
         ```bash
         conda env create --name qiime2-amplicon-2025.4 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.4/amplicon/released/qiime2-amplicon-ubuntu-latest-conda.yml
@@ -134,7 +134,7 @@ Follow the instructions for your operating system.
         conda update conda
         ```
     
-    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2025.4' to indicate what QIIME2 release is installed .
+    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2025.4' to indicate what QIIME2 release is installed.
     
         ```bash
         conda env create --name qiime2-amplicon-2025.4 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.4/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
@@ -160,7 +160,7 @@ Follow the instructions for your operating system.
         conda update conda
         ```
     
-    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2025.4' to indicate what QIIME2 release is installed .
+    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2025.4' to indicate what QIIME2 release is installed.
     
         ```bash
         CONDA_SUBDIR=osx-64 conda env create --name qiime2-amplicon-2025.4 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.4/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
