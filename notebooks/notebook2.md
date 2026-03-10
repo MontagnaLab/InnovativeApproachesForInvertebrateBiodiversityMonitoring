@@ -301,6 +301,7 @@ cd $WORKDIR
 ```
 
 Import the sequences in a QZA file.
+- `--type` specify the type of qiime2 artifact to be created, you can use `qiime tools list-types` to see all the importable types available.
 ```bash
 qiime tools import \
   --type 'SampleData[PairedEndSequencesWithQuality]' \
