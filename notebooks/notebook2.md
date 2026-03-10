@@ -397,14 +397,17 @@ Create visualizations for the ASV table and ASV sequences files.
 # table visualization
 qiime feature-table summarize \
   --i-table table.qza \
-  --m-sample-metadata-file metadata.tsv \
-  --o-visualization table.qzv
+  --m-metadata-file metadata.tsv \
+  --o-feature-frequencies feature-frequencies.qza \
+  --o-sample-frequencies sample-frequencies.qza \
+  --o-summary table.qzv
 
 # sequences visualization
 qiime feature-table tabulate-seqs \
   --i-data rep-seqs.qza \
   --o-visualization rep-seqs.qzv
 ```
+Let's have a look at these visualizations.
 
 
 ### 2.6. Taxonomic classification
