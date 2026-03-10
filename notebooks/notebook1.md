@@ -108,16 +108,16 @@ Follow the instructions for your operating system.
         conda update conda
         ```
     
-    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2026.1' to indicate what QIIME2 release is installed .
+    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2025.4' to indicate what QIIME2 release is installed .
     
         ```bash
-        conda env create --name qiime2-amplicon-2026.1 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2026.1/amplicon/released/qiime2-amplicon-ubuntu-latest-conda.yml
+        conda env create --name qiime2-amplicon-2025.4 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.4/amplicon/released/qiime2-amplicon-ubuntu-latest-conda.yml
         ```
     
     3. Activate the conda environment containing QIIME2. You will need to run this command every time you need to use QIIME2.
     
         ```bash
-        conda activate qiime2-amplicon-2026.1
+        conda activate qiime2-amplicon-2025.4
         ```
     
     4. Deactivate the conda environment. Run this to quit the QIIME2 environment and return to the base environment.
@@ -126,7 +126,7 @@ Follow the instructions for your operating system.
         conda deactivate
         ```
 
-- **MAC OS**
+- **MAC OS (Intel)**
 
     1. Update conda to the latest version.
     
@@ -134,16 +134,16 @@ Follow the instructions for your operating system.
         conda update conda
         ```
     
-    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2026.1' to indicate what QIIME2 release is installed .
+    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2025.4' to indicate what QIIME2 release is installed .
     
         ```bash
-        conda env create --name qiime2-amplicon-2026.1 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2026.1/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
+        conda env create --name qiime2-amplicon-2025.4 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.4/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
         ```
     
     3. Activate the conda environment containing QIIME2. You will need to run this command every time you need to use QIIME2.
     
         ```bash
-        conda activate qiime2-amplicon-2026.1
+        conda activate qiime2-amplicon-2025.4
         ```
     
     4. Deactivate the conda environment. Run this to quit the QIIME2 environment and return to the base environment.
@@ -151,6 +151,35 @@ Follow the instructions for your operating system.
         ```bash
         conda deactivate
         ```
+
+- **MAC OS (Apple Silicon)**
+
+    1. Update conda to the latest version.
+    
+        ```bash
+        conda update conda
+        ```
+    
+    2. Create a new conda environment for QIIME 2 and install it. You can choose whatever name you’d like for the environment, here we call it 'qiime2-amplicon-2025.4' to indicate what QIIME2 release is installed .
+    
+        ```bash
+        CONDA_SUBDIR=osx-64 conda env create --name qiime2-amplicon-2025.4 --file https://raw.githubusercontent.com/qiime2/distributions/refs/heads/dev/2025.4/amplicon/released/qiime2-amplicon-macos-latest-conda.yml
+        ```
+    
+    3. Activate the conda environment containing QIIME2. You will need to run this command every time you need to use QIIME2.
+    
+        ```bash
+        conda activate qiime2-amplicon-2025.4
+        conda config --env --set subdir osx-64
+        ```
+    
+    4. Deactivate the conda environment. Run this to quit the QIIME2 environment and return to the base environment.
+    
+        ```bash
+        conda deactivate
+        ```
+
+
 
 #### 1.1.4. Install optional softwares
 
