@@ -300,10 +300,8 @@ First move back to the working directory.
 cd $WORKDIR
 ```
 
-Now we can use the manifest file to import sequences in QIIME2 with `qiime tools import`.
-
-The main parameters of this command are:
-- `--type` specifies the type of qiime2 artifact to be created, you can use `qiime tools list-types` to see all the importable types available.
+Now we can use the manifest file to import sequences in QIIME2 with `qiime tools import`. The main parameters of this command are:
+- `--type` specifies the type of qiime2 artifact (QZA) to be created, you can use `qiime tools list-types` to see all the importable types available.
 - `--input-format` specifies the format of the data to be imported, you can use `qiime tools list-formats` to see all the input data format available
 ```bash
 qiime tools import \
@@ -313,7 +311,7 @@ qiime tools import \
   --output-path seqs.qza 
 ```
 
-Create a visualization (QZV) of the imported sequences with `qiime demux summarize`.
+To see a summary of the imported sequences we can create a visualization (QZV) with `qiime demux summarize`.
 ```bash
 qiime demux summarize \
   --i-data seqs.qza \
@@ -322,7 +320,7 @@ qiime demux summarize \
 ℹ️ QIIME2 QZV files can be visualized using the command `qiime tools view <filename.qzv>` or using the [online visualizer](https://view.qiime2.org/).
 
 
-If you remember the quality check reports thare are still some Illumina adapter in the sequences, it is better to remove them using [q2-cutadapt](https://github.com/qiime2/q2-cutadapt)
+If you remember the quality check reports thare are still some Illumina adapter in the sequences, it is better to remove them using [q2-cutadapt](https://github.com/qiime2/q2-cutadapt). The command `qiime cutadapt trim-paired` has many parameters, in this case we just need `--p-adapter-f` and `--p-adapter-r` to specify the adapter sequence that we want to remove from the 3' end of forward and reverse reads, respectively.
 ```bash
 qiime cutadapt trim-paired \
   --i-demultiplexed-sequences seqs.qza \
@@ -337,8 +335,10 @@ qiime cutadapt trim-paired \
 
 We are now ready for removing non-biological variation from our data. We use the [DADA2 algorithm](https://benjjneb.github.io/dada2/) implemented in [q2-dada2](https://github.com/qiime2/q2-dada2) that models and corrects sequencing errors to infer exact biological sequences (amplicon sequence variants, ASVs). The most important parameters are:
 - `--p-trim-left-f` and `--p-trim-left-r`, corresponding to the length of the forward and reverse primer respectively
--  `--p-trunc-len-f` and `--p-trunc-len-r`, corresponding to the length at which to trunc the sequences due to the quality drop
-
+- `--p-trunc-len-f` and `--p-trunc-len-r`, corresponding to the length at which to trunc the sequences due to quality drop
+- `--p-max-ee-f` and `--p-max-ee-r`, reads with number of expected errors higher than this value will be discarded
+- `--p-trunc-q`, reads are truncated at the first instance of a quality score less than or equal to this value
+- `--p-n-reads-learn`, number of reads used for training the error model, 1M is usually enough, but it may be increased for big datasets
 ```bash
 qiime dada2 denoise-paired \
   --i-demultiplexed-seqs seqs_trimmed.qza \
@@ -349,9 +349,8 @@ qiime dada2 denoise-paired \
   --p-max-ee-f 2 \
   --p-max-ee-r 2 \
   --p-trunc-q 2 \
-  --p-pooling-method 'pseudo' \
-  --p-chimera-method 'consensus' \
   --p-n-reads-learn 1000000 \
+  --p-pooling-method 'pseudo' \
   --p-n-threads $JOBS \
   --o-table table_MixedOrientation.qza \
   --o-representative-sequences rep-seqs_MixedOrientation.qza \
