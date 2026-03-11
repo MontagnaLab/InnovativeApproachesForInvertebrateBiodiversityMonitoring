@@ -10,9 +10,8 @@ Primers used for the amplification
 ### 2.1. Preliminary settings
 
 We start defining some variables that we will use later.
-First we define the variable `RAWDIR` for the directory containing raw sequences (i.e. the fastq files) and the variable `WORKDIR` for the working directory where we want to save the results of the analyses. Put also the [metadata.missing.link..](missing.link) in the working directory.
-> [!NOTE]
-> STILL HAVE TO ADD THE LINK
+First we define the variable `RAWDIR` for the directory containing raw sequences (i.e. the fastq files) and the variable `WORKDIR` for the working directory where we want to save the results of the analyses. Remember to put also the [metadata](https://github.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/blob/main/data/metadata.tsv) in the working directory.
+
 ```bash
 RAWDIR=<path/to/rawdata/dir>
 #! RAWDIR='/home/vesuvio/Desktop/StorageDisk/RawData/LUCAS_18S_RawData/Campioni_per_corso_MM'
