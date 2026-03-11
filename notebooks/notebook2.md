@@ -312,10 +312,13 @@ qiime demux summarize \
   --i-data seqs.qza \
   --o-visualization seqs.qzv
 ```
-ℹ️ QIIME2 QZV files can be visualized using the command `qiime tools view <filename.qzv>` or loading the files in the [online visualizer](https://view.qiime2.org/). Let's have a look at [seqs.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/seqs.qzv).
+> [!TIP]
+> QIIME2 QZV files can be visualized using the command `qiime tools view <filename.qzv>` or loading the files in the [online visualizer](https://view.qiime2.org/).
+
+Let's have a look at [seqs.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/seqs.qzv).
 
 
-If you remember the quality check reports thare are still some Illumina adapter in the sequences, it is better to remove them using [q2-cutadapt](https://github.com/qiime2/q2-cutadapt). The command `qiime cutadapt trim-paired` has many parameters, in this case we just need `--p-adapter-f` and `--p-adapter-r` to specify the adapter sequence that we want to remove from the 3' end of forward and reverse reads, respectively.
+If you remember the quality check reports there are still some Illumina adapter in the sequences, it is better to remove them using [q2-cutadapt](https://github.com/qiime2/q2-cutadapt). The command `qiime cutadapt trim-paired` has many parameters, in this case we just need `--p-adapter-f` and `--p-adapter-r` to specify the adapter sequence that we want to remove from the 3' end of forward and reverse reads, respectively.
 ```bash
 qiime cutadapt trim-paired \
   --i-demultiplexed-sequences seqs.qza \
@@ -353,7 +356,9 @@ qiime dada2 denoise-paired \
   --o-base-transition-stats base-transition-stats.qza \
   --verbose
 ```
-❗In real life scenarios you should experiment with `--p-trunc-len-f` and `--p-trunc-len-r` parameters and compare the results (in terms of number of retained sequences per sample and sequences length) to choose the best values.
+
+> [!IMPORTANT]
+> In real life scenarios you should experiment with `--p-trunc-len-f` and `--p-trunc-len-r` parameters and compare the results (in terms of number of retained sequences per sample and sequences length) to choose the best values.
 
 Now let's create visualizations for the two stats files produced by the DADA2 algorithm.
 ```bash
@@ -367,9 +372,9 @@ qiime dada2 plot-base-transitions \
   --i-base-transition-stats base-transition-stats.qza \
   --o-visualization base-transition-stats.qzv
 ```
-Let's have a look at these visualizations.
+Let's have a look at [denoising-stats.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/denoising-stats.qzv) and [base-transition-stats.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/base-transition-stats.qzv).
 
-Since in this study barcodes and adapters were added after PCR amplification each fastq file contained both forward and reverse reads. So sequences needs to be re-orientered using the reference database as guide. We can use the `qiime rescript orient-seqs` from the [q2-RESCRIPt](https://github.com/bokulich-lab/RESCRIPt) plugin for doing it.
+Since in this study barcodes and adapters were added after PCR amplification each fastq file contained both forward and reverse reads. So sequences needs to be re-orientered using the reference database as guide. We can use the `qiime rescript orient-seqs` command from the [q2-RESCRIPt](https://github.com/bokulich-lab/RESCRIPt) plugin for doing it.
 ```bash
 qiime rescript orient-seqs \
   --i-sequences rep-seqs_MixedOrientation.qza \
