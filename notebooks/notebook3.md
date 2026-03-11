@@ -3,18 +3,43 @@
 ## 3. Diversity measures and statistical analyses
 
 ### 3.1. Alpha diversity
-Alpha diversity refers to the diversity within a single sample or community, typically measured as the number and relative abundance of taxa present. Before computing alpha diversity metrics we must deal with the fact that different sequencing depths in metabarcoding datasets can bias the alpha diversity computation, due to unequal sampling effort. So metabarcoding datasets must be normalized somehow before calculating alpha diversity. A quick way for doing it (even if probably not the best way) is to randomly subsample the samples to the same depth. Usually the depth of the smallest sample is used.
-
+Alpha diversity refers to the diversity within a single sample or community, typically measured as the number and relative abundance of taxa present. Before computing alpha diversity metrics we must deal with the fact that different sequencing depths in metabarcoding datasets can bias computation, due to unequal sampling effort. So metabarcoding datasets must be normalized somehow before calculating alpha diversity. A quick way for doing it (even if probably not the best way) is to randomly subsample the samples to the same depth (rarefaction). Usually the depth of the smallest sample is used. Let's have a look to sequencing depth variation in our samples.
 
 ```bash
-
 qiime feature-table summarize \
   --i-table invertebrates_table_clean.qza \
   --m-metadata-file metadata.tsv \
   --o-feature-frequencies feature-frequencies_clean.qza \
   --o-sample-frequencies sample-frequencies_clean.qza \
   --o-summary invertebrates_table_clean.qzv
+```
+Let's visualize [invertebrates_table_clean.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/invertebrates_table_clean.qzv).
 
+To evaluate the impact of rarefaction on diversity estimates we can use the command `qiime diversity alpha-rarefaction` that generates interactive alpha rarefaction curves. The main parameters are:
+- `--p-min-depth`, the minimum rarefaction depth to be tested
+- `--p-max-depth`, the maximum rarefaction depth to be tested
+- `--p-steps`, the number of rarefaction depths to include between `min-depth` and `max-depth`
+- `--p-iterations`, the number of rarefied feature tables to compute at each step
+
+```bash
+qiime diversity alpha-rarefaction \
+  --i-table FILT_invertebrates_table_clean.qza \
+  --p-min-depth 1 \
+  --p-max-depth 25000 \
+  --p-steps 25 \
+  --p-iterations 10 \
+  --m-metadata-file metadata.tsv \
+  --o-visualization prova_diversity_core_FILT/alpha_rarefaction.qzv
+```
+
+
+
+
+
+
+
+
+```bash
 qiime diversity core-metrics \
   --i-table invertebrates_table_clean.qza \
   --p-sampling-depth 8167 \
