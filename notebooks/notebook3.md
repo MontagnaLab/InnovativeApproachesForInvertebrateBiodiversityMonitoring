@@ -75,7 +75,7 @@ $S =$ Number of taxa (ASVs in our case) observed in the sample
 
 $p_i =$ Relative abundance of taxon $i$ in the sample
 
-To perform diversity index calculation we can use ` qiime diversity alpha` as follow.
+To perform diversity index calculation we can use ` qiime diversity alpha` in a `for` loop as follow.
 ```bash
 for div in observed_features shannon simpson; do
   qiime diversity alpha \
@@ -85,26 +85,21 @@ for div in observed_features shannon simpson; do
 done
 ```
 
+Now that we have some alpha diversity indices we can use them to investigate diversity variation in our data. First let's se if different groups of samples have different diversity values. We can use the command `qiime diversity alpha-group-significance` for comparing diversity between the levels of each categorical variable in our metadata.
+
+```bash
+for div in observed_features shannon simpson; do
+qiime diversity alpha-group-significance \
+  --i-alpha-diversity diversity_results/alpha_${div}_vector.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization diversity_results/alpha_${div}_significance.qzv
+done
+```
+Let's have a look at these visualizations: [alpha_observed_features_significance.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/alpha_observed_features_significance.qzv), [alpha_shannon_significance.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/alpha_shannon_significance.qzv), [alpha_simpson_significance.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/alpha_simpson_significance.qzv).
+
 
 
 ```bash
-qiime diversity core-metrics \
-  --i-table invertebrates_table_clean.qza \
-  --p-sampling-depth 8167 \
-  --m-metadata-file metadata.tsv \
-  --p-n-jobs $JOBS \
-  --output-dir prova_diversity_core
-
-for div in observed_features shannon evenness; do
-qiime diversity alpha-group-significance \
-  --i-alpha-diversity prova_diversity_core/${div}_vector.qza \
-  --m-metadata-file metadata.tsv \
-  --o-visualization prova_diversity_core/${div}_significance.qzv
-done
-
-
-
-
 
 qiime feature-table filter-samples \
   --i-table invertebrates_table_clean.qza \
