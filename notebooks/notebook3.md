@@ -89,58 +89,29 @@ Now that we have some alpha diversity indices we can use them to investigate div
 
 ```bash
 for div in observed_features shannon simpson; do
-qiime diversity alpha-group-significance \
-  --i-alpha-diversity diversity_results/alpha_${div}_vector.qza \
-  --m-metadata-file metadata.tsv \
-  --o-visualization diversity_results/alpha_${div}_significance.qzv
+  qiime diversity alpha-group-significance \
+    --i-alpha-diversity diversity_results/alpha_${div}_vector.qza \
+    --m-metadata-file metadata.tsv \
+    --o-visualization diversity_results/alpha_${div}_significance.qzv
 done
 ```
 Let's have a look at these visualizations: [alpha_observed_features_significance.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/alpha_observed_features_significance.qzv), [alpha_shannon_significance.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/alpha_shannon_significance.qzv), [alpha_simpson_significance.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/alpha_simpson_significance.qzv).
 
 
+We can also compute correlations between diversity indices and numeric variables in our metadata using the command `qiime diversity alpha-group-significance`.
+```bash
+for div in observed_features shannon simpson; do
+  qiime diversity alpha-correlation \
+    --i-alpha-diversity diversity_results/alpha_${div}_vector.qza \
+    --m-metadata-file metadata.tsv \
+    --o-visualization diversity_results/alpha_${div}_correlation.qzv
+done
+
+```
+
+### 3.2. Beta diversity
 
 ```bash
-
-qiime feature-table filter-samples \
-  --i-table invertebrates_table_clean.qza \
-  --m-metadata-file SamplesToExclude.txt \
-  --p-exclude-ids \
-  --o-filtered-table FILT_invertebrates_table_clean.qza
-
-qiime diversity alpha-rarefaction \
-  --i-table FILT_invertebrates_table_clean.qza \
-  --p-max-depth 25000 \
-  --m-metadata-file metadata.tsv \
-  --p-steps 25 \
-  --p-iterations 10 \
-  --o-visualization prova_diversity_core_FILT/alpha_rarefaction.qzv
-
-qiime diversity core-metrics \
-  --i-table FILT_invertebrates_table_clean.qza \
-  --p-sampling-depth 8167 \
-  --m-metadata-file metadata.tsv \
-  --p-n-jobs $JOBS \
-  --output-dir prova_diversity_core_FILT
-
-for div in observed_features shannon evenness; do
-qiime diversity alpha-group-significance \
-  --i-alpha-diversity prova_diversity_core_FILT/${div}_vector.qza \
-  --m-metadata-file metadata.tsv \
-  --o-visualization prova_diversity_core_FILT/${div}_significance.qzv
-done
-
-
-
-for div in observed_features shannon evenness; do
-qiime diversity alpha-correlation \
-  --i-alpha-diversity prova_diversity_core_FILT/${div}_vector.qza \
-  --m-metadata-file metadata.tsv \
-  --o-visualization prova_diversity_core_FILT/${div}_AlphaCorrelation.qzv
-done
-
-
-
-
 
 pip install gemelli
 qiime dev refresh-cache
