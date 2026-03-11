@@ -24,13 +24,11 @@ We set another variable for the maximum number of processes that can be run simu
 
 ```bash
 JOBS=<number_of_cores>
-#! JOBS=32
 ```
 
 Finally we define a variable containing the name of the conda environment where we installed **QIIME2**.
 ```bash
 ENV=qiime2-amplicon-2026.1
-#! ENV=qiime2-amplicon-2025.10
 ```
 
 
