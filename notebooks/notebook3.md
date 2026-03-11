@@ -3,8 +3,7 @@
 ## 3. Diversity measures and statistical analyses
 
 ### 3.1. Alpha diversity
-Alpha diversity refers to the diversity within a single sample or community, typically measured as the number and relative abundance of taxa present.
-
+Alpha diversity refers to the diversity within a single sample or community, typically measured as the number and relative abundance of taxa present. Before computing alpha diversity metrics we must deal with the fact that different sequencing depths in metabarcoding datasets can bias the alpha diversity computation, due to unequal sampling effort. So metabarcoding datasets must be normalized somehow before calculating alpha diversity. A quick way for doing it (even if probably not the best way) is to randomly subsample the samples to the same depth. Usually the depth of the smallest sample is used.
 
 
 ```bash
