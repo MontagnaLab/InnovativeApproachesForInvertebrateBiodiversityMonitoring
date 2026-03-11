@@ -136,13 +136,6 @@ qiime emperor biplot \
 
 
 ```
-
-
-
-
-
-
-
 ## **exporting the results**
 
 
