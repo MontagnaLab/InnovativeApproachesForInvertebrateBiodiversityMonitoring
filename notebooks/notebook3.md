@@ -52,19 +52,19 @@ qiime feature-table rarefy \
 
 Then we can use the rarefied table to compute alpha diversity. We will calculate three classic alpha diversity indices. 
 
-- **Richness** (`observed_features`)
+- **Richness** ($S$, `observed_features`)
 
 $$
 S
 $$
 
-- **Shannon index** (`shannon`)
+- **Shannon index** ($H'$, `shannon`)
 
 $$
 H' = -\sum_{i=1}^{S} p_i \ln p_i
 $$
 
-- **Simpson index** (`simpson`)
+- **Simpson index** ($D$, `simpson`)
 
 $$
 D = 1 - \sum_{i=1}^{S} p_i^2
@@ -75,6 +75,7 @@ $S =$ Number of taxa (ASVs in our case) observed in the sample
 
 $p_i =$ Relative abundance of taxon $i$ in the sample
 
+To perform diversity index calculation we can use ` qiime diversity alpha` as follow.
 ```bash
 for div in observed_features shannon simpson; do
   qiime diversity alpha \
