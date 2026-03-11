@@ -15,6 +15,11 @@ qiime feature-table summarize \
 ```
 Let's visualize [invertebrates_table_clean.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/invertebrates_table_clean.qzv).
 
+First we can create a new directory for storing diversity results.
+```bash
+mkdir -p diversity_results
+```
+
 To evaluate the impact of rarefaction on diversity estimates we can use the command `qiime diversity alpha-rarefaction` that generates interactive alpha rarefaction curves. The main parameters are:
 - `--p-min-depth`, the minimum rarefaction depth to be tested
 - `--p-max-depth`, the maximum rarefaction depth to be tested
@@ -23,14 +28,15 @@ To evaluate the impact of rarefaction on diversity estimates we can use the comm
 
 ```bash
 qiime diversity alpha-rarefaction \
-  --i-table FILT_invertebrates_table_clean.qza \
+  --i-table invertebrates_table_clean.qza \
   --p-min-depth 1 \
   --p-max-depth 25000 \
   --p-steps 25 \
   --p-iterations 10 \
   --m-metadata-file metadata.tsv \
-  --o-visualization prova_diversity_core_FILT/alpha_rarefaction.qzv
+  --o-visualization diversity_results/alpha_rarefaction.qzv
 ```
+Let's visualize [alpha_rarefaction.qzv](https://view.qiime2.org/visualization/?src=https://raw.githubusercontent.com/MontagnaLab/InnovativeApproachesForInvertebrateBiodiversityMonitoring/main/outputs/QIIME2_visualizations/alpha_rarefaction.qzv).
 
 
 
